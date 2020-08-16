@@ -32,8 +32,7 @@ router.beforeEach(async(to, from, next) => {
         next()
       } else {
         try {
-          // get user info
-          // note: roles must be a object array! such as: ['admin'] or ,['developer','editor']
+          console.log('invoke store/user/getInfo')
           const { roles } = await store.dispatch('user/getInfo')
 
           // generate accessible routes map based on roles
@@ -62,7 +61,6 @@ router.beforeEach(async(to, from, next) => {
       next()
     } else {
       // other pages that do not have permission to access are redirected to the login page.
-      debugger
       next(`/login?redirect=${to.path}`)
       // NProgress.done()
     }

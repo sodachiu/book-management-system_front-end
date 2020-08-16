@@ -136,7 +136,9 @@ export default {
           this.loading = true
           this.$store.dispatch('user/login', this.loginForm)
             .then(() => {
-              this.$router.push({ path: this.redirect || '/', query: this.otherQuery })
+              const path = { path: this.redirect || '/', query: this.otherQuery }
+              console.log('in handleLogin path: ', path)
+              this.$router.push(path)
               this.loading = false
             })
             .catch(() => {

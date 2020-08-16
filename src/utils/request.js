@@ -12,7 +12,7 @@ service.interceptors.request.use(
   config => {
     if (store.getters.token) {
       console.log('token: ', store.getters.token)
-      config.headers['Authorization'] = 'Bearer ' + getToken()
+      config.headers['Authorization'] = getToken()
     }
     return config
   },
@@ -50,7 +50,6 @@ service.interceptors.response.use(
     }
   },
   error => {
-    console.log('err' + error) // for debug
     Message({
       message: error.message,
       type: 'error',

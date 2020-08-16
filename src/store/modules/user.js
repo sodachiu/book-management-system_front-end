@@ -1,4 +1,4 @@
-import { login, logout, getInfo } from '@/api/user'
+import { login, getInfo } from '@/api/user'
 import { getToken, setToken, removeToken } from '@/utils/auth'
 import router, { resetRouter } from '@/router'
 
@@ -49,18 +49,18 @@ const actions = {
     return new Promise((resolve, reject) => {
       getInfo(state.token).then(response => {
         const { data } = response
+        console.log('in front end: data = ', data)
 
         if (!data) {
           reject('Verification failed, please Login again.')
         }
-
         const { roles, name, avatar, introduction } = data
-
+        console.log('in front end: ', roles)
+        console.log('in front end: ', avatar)
         // roles must be a non-empty array
         if (!roles || roles.length <= 0) {
           reject('getInfo: roles must be a non-null array!')
         }
-
         commit('SET_ROLES', roles)
         commit('SET_NAME', name)
         commit('SET_AVATAR', avatar)
@@ -75,23 +75,19 @@ const actions = {
   // user logout
   logout({ commit, state, dispatch }) {
     return new Promise((resolve, reject) => {
-      logout(state.token).then(() => {
+      try {
         commit('SET_TOKEN', '')
         commit('SET_ROLES', [])
         removeToken()
         resetRouter()
-
-        // reset visited views and cached views
-        // to fixed https://github.com/PanJiaChen/vue-element-admin/issues/2485
         dispatch('tagsView/delAllViews', null, { root: true })
 
         resolve()
-      }).catch(error => {
+      } catch (error) {
         reject(error)
-      })
+      }
     })
   },
-
   // remove token
   resetToken({ commit }) {
     return new Promise(resolve => {
